@@ -5,15 +5,17 @@
 
 
 int cmp_value;
-
+int remainder;
 
 void set(int *LHS,int RHS);
-void isneg(int value);
+void err(void);//thx James
+void neg(int value);
 void inv(int value,int *result);
 void cmp(int A,int B);
 void add(int initial,int increment,int *result);
 void sub(int initial,int increment,int *result);
 void mul(int multiplicand,int multiplier,int *result);
+void div(int dividend,int divisor,int *result);
 
 
 
@@ -22,10 +24,36 @@ void main(void){
     static int A;
     static int B;
 
-    set(&A, -5);
-    set(&B, 5);
-    mul(A,B,&result);
-    printf("%d\n", result);
+    set(&A, 5);
+    set(&B, 2);
+    div(A,B,&result);
+    
+    printf("%d / %d = %dR%d\n",A,B,result,remainder);
+
+    inv(A,&A);
+    div(A,B,&result);
+
+    printf("%d / %d = %dR%d\n",A,B,result,remainder);
+
+    inv(A,&A);
+    inv(B,&B);
+    div(A,B,&result);
+
+    printf("%d / %d = %dR%d\n",A,B,result,remainder);
+
+    inv(A,&A);
+    div(A,B,&result);
+
+    printf("%d / %d = %dR%d\n",A,B,result,remainder);
+
+    // char *terminal_ptr = stdout->_IO_write_ptr;
+
+    // *(stdout)->_IO_write_ptr++ = 'C';
+    // *(stdout)->_IO_write_ptr++ = 'A';
+    // *(stdout)->_IO_write_ptr++ = 'T';
+    // *(stdout)->_IO_write_ptr++ = '\n';
+
+    //printf("buffer-start = %lX\nwrite-pointer = %lX\n",stdout->_IO_write_base,stdout->_IO_write_ptr);
 }
 
 
@@ -39,7 +67,7 @@ sets the variable on the left to the value on the right.
 Same as 'V = #'
 */
 void set(int *LHS,int RHS){
-    (((*LHS)>>INT>>INT>>INT>>3)&0x1) ? 1 : ({goto poszero_loop;});
+    (((*LHS)>>INT>>INT>>INT>>INT>>INT>>INT>>3)&0x1) ? 1 : ({goto poszero_loop;});
 negzero_loop:
     *LHS ? 1 : ({goto set;});
     (*LHS)++;
@@ -49,7 +77,7 @@ poszero_loop:
     (*LHS)--;
     goto poszero_loop;
 set:
-    ((RHS>>INT>>INT>>INT>>3)&0x1) ? 1 : ({goto posset_loop;});
+    ((RHS>>INT>>INT>>INT>>INT>>INT>>INT>>3)&0x1) ? 1 : ({goto posset_loop;});
 negset_loop:
     RHS ? 1 : ({goto end;});
     RHS++;
@@ -63,14 +91,14 @@ posset_loop:
 end:
 }
 /*
-function: isneg
+function: neg
 Checks to see if value is negative, very
 useful to avoid the long bitwise string
 if it is negatibe, return a 1
 if it is positive, return a 0
 */
-void isneg(int value){
-    ((value>>INT>>INT>>INT>>3)&0x1) ? ({goto negative;}) : ({goto positive;});
+void neg(int value){
+    ((value>>INT>>INT>>INT>>INT>>INT>>INT>>3)&0x1) ? ({goto negative;}) : ({goto positive;});
 positive:
     set(&cmp_value, 0);
     goto end;
@@ -90,7 +118,7 @@ negative return value means A is lesser than B,
 zero return value means A is equal to B
 */
 void cmp(int A,int B){
-    isneg(B);
+    neg(B);
     cmp_value ? ({goto negative_B;}) : ({goto positive_B;});
 positive_B:
 positive_loop:
@@ -117,7 +145,7 @@ given in the third term.
 */
 void add(int initial,int increment,int *result){
     set(result,initial);
-    isneg(increment);
+    neg(increment);
     cmp_value ? ({goto negative_inc;}) : ({goto positive_inc;});
 positive_inc:
     cmp(increment,0);
@@ -161,7 +189,7 @@ void mul(int multiplicand,int multiplier,int *result){
     set(result, 0);
     cmp(multiplier,0);
     cmp_value ? 1 : ({goto mul_zero;});
-    isneg(multiplier);
+    neg(multiplier);
     cmp_value ? 1 : ({goto mul_loop;});
     inv(multiplier,&multiplier);
     set(&negative,1);
@@ -180,5 +208,45 @@ mul_zero:
     set(result,0);
     goto end;
 end:
+}
+/*
+function: div
+divides two numbers and stores answer in the 
+given variable. stores the remainder in the 
+global variable "remainder"
+*/
+void div(int dividend,int divisor,int *result){
+    divisor ? 1 : err();
+    int negative;
+    set(&negative,0);
+    neg(dividend);
+    cmp_value ? 1 : ({goto neg1;});
+    negative++;
+    inv(dividend,&dividend);
+neg1:
+    neg(divisor);
+    cmp_value ? 1 : ({goto neg2;});
+    negative++;
+    inv(divisor,&divisor);
+neg2:
+    set(result,0);
+div_loop:
+    neg(dividend);
+    cmp_value ? ({goto remainder;}) : 1;
+    sub(dividend,divisor,&dividend);
+    (*result)++;
+    goto div_loop;
+remainder:
+    add(dividend,divisor,&dividend);
+    set(&remainder,dividend);
+    cmp(negative,1);
+    cmp_value ? ({goto end;}) : 1;
+    inv(*result,result);
+end:
+}
 
+void err(void){
+    int *zero;
+    set(zero,0);
+    *zero++;
 }
