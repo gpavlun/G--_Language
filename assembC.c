@@ -245,6 +245,10 @@ remainder:
 end:
 }
 
+/*
+ * intentionally create segfault to terminate program
+ * when error is detected
+ */
 void err(void){
     int *zero;
     set(zero,0);
