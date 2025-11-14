@@ -9,5 +9,5 @@ default: assembC.c
 loud: assembC.c
 	gcc -Wall -o assembC.exe assembC.c
 
-clean: assembC.exe
-	rm -f assembC.exe
+clean: *.exe
+	rm -f *.exe

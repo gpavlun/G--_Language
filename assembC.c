@@ -250,7 +250,7 @@ prints a single charcter to the commandline
 */
 void put_c(int value){
     char c;
-    setc(c,value);
+    setc(&c,value);
 
     asm(
         "mov $1, %%rax\n"
@@ -306,17 +306,17 @@ writes an entire integer to the command line
 */
 void wrt_int(int value){
     char negative;
-    setc(negative,0);
+    setc(&negative,0);
     neg(value);
     cmp_value ? 1 : ({goto start;});
-    setc(negative,1);
+    setc(&negative,1);
     inv(value,&value);
     put_c(0x2D);
 start:
     int place;
     int result;
     char prt;
-    set(place,1000000000);
+    set(&place,1000000000);
 
 
     div(value,place,&result);
