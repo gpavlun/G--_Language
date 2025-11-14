@@ -28,21 +28,7 @@ void main(void){
     static int B;
     static char cA;
 
-    set(&A, 6);
-    set(&B, 2);
-    div(A,B,&result);
-    itoa(result,&cA);
-    put_c(cA);
-    set(&A, 5);
-    set(&B, 2);
-    div(A,B,&result);
-    itoa(result,&cA);
-    put_c(cA);
-    set(&A, -10);
-    set(&B, 2);
-    div(A,B,&result);
-    itoa(result,&cA);
-    put_c(cA);
+    put_c('5');
 }
 
 
@@ -259,7 +245,7 @@ void put_c(int value){
         "mov $1, %%rdx\n"
         "syscall\n"
         :
-        : "r"((char *)c)
+        : "r"(&c)
         : "%rax", "%rdi", "%rsi", "%rdx"
     );
 
