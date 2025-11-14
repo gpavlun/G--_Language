@@ -20,6 +20,8 @@ void setc(char *LHS,char RHS);                          //sets a variable to a c
 void itoa(int integer,char *character);                 //converts an int to a printatble form
 void put_c(int value);                                //puts an ascii character on the command line
 void wrt_int(int value);                                
+void wrt_str(char *string);  
+
 
 
 void main(void){
@@ -27,10 +29,13 @@ void main(void){
     static int A;
     static int B;
     static char cA;
-
+    
+    wrt_str("Welcome to C--!\n");
+    
     put_c('5');
     put_c('\n');
     wrt_int(0x00478);
+    
 }
 
 
@@ -325,3 +330,14 @@ loop:
     index ? ({goto loop;}) : 1;
     put_c('\n');
 }
+/*
+function: wrt_int
+writes a string to the command line
+*/
+void wrt_str(char *string){
+loop:
+    put_c(*string);
+    string++;
+    cmp(*string,'\0');
+    cmp_value ? ({goto loop;}) : 1;
+}  
