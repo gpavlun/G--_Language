@@ -1,13 +1,13 @@
-# makefile for C-without-built-in functions
+# makefile for G-- programming language functions
 # hides warnings by default
 # but also includes option ("loud")
 # to display all of them
 
-default: assembC.c
-	gcc -w -o assembC.exe assembC.c
+default: G--_Language.c
+	gcc -w -o assembC.exe G--_Language.c
 
-loud: assembC.c
-	gcc -Wall -o assembC.exe assembC.c
+loud: G--_Language.c
+	gcc -Wall -o assembC.exe G--_Language.c
 
 clean: *.exe
 	rm -f *.exe
