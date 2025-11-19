@@ -23,4 +23,4 @@ Input_Output.o :  Input_Output.c Input_Output.h
 	gcc -c  G--_Language.c
 
 clean :
-	rm -f *.o  G--_Language core
+	rm -f *.o  G--_Language
