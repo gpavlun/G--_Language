@@ -3,6 +3,8 @@ input and output functions for the command line
 */
 
 #include "Character_Ops.h"
+#include "Command_Calls.h"
+// necessary to use err()
 #include "Integer_Ops.h"
 #include "Input_Output.h"
 

@@ -12,6 +12,8 @@ sub() ---> subtracts two numbers
 mul() ---> multiplies two numbers
 div() ---> divides two numbers
 */
+#include "Command_Calls.h"
+// necessary to use err()
 #define INT 4
 int cmp_value;
 int modulo;
