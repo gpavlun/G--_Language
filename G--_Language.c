@@ -3,10 +3,12 @@
 #include "Character_Ops.h"
 #include "Input_Output.h"
 
-#define memblock char
-
 extern int cmp_value;
 extern int modulo;
+
+#define byte unsigned char
+
+void fset(byte Lbytes, byte LHS[Lbytes], byte Rbytes, byte RHS[Rbytes]);
 
 void main(void){    
     put_str("\n=================\n");
@@ -22,12 +24,43 @@ void main(void){
     where everything is void
     */
 
-    memblock MemoryBlock[100];
-    set((int *)&(MemoryBlock[3]),10);
-    set((int *)&(MemoryBlock[7]), 2);
-    mul((int)MemoryBlock[3],(int)MemoryBlock[7],(int *)&(MemoryBlock[11]));
-    put_int((int)(MemoryBlock[11])); 
+    byte integer[4];
+    byte number[8];
+    integer[0] = 5;
+    fset(8,number,8,&(integer[0]));
+    put_c((*number) + 0x30);
+
     // print the result using our integer printing function
 }
 
 
+void fset(byte Lbytes, byte LHS[Lbytes], byte Rbytes, byte RHS[Rbytes]){
+    
+    zero_byte_iteration_loop: 
+    Lbytes ? 0 : ({goto set_byte_iteration_loop;});     
+        Lbytes--;
+    
+        zero_loop:
+        LHS[Lbytes] ? 0 : ({goto zbil_next;});         
+            LHS[Lbytes]--;   
+        goto zero_loop;  
+        
+        zbil_next:
+    goto zero_byte_iteration_loop;
+
+    set_byte_iteration_loop:
+    Rbytes ? 0 : ({goto end;});
+        Rbytes--;
+
+        set_loop:
+        RHS[Rbytes] ? 0 : ({goto sbil_next;});
+            RHS[Rbytes]--;
+            LHS[Rbytes]++;
+            Rbytes++;
+        goto set_loop;
+        
+        sbil_next:
+    goto set_byte_iteration_loop;
+
+    end:
+}
