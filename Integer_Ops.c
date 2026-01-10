@@ -3,7 +3,7 @@ contains all operaterations used for data type integer,
 which is defined as four bytes in this system
 
 list of operations:
-set() ---> assignment
+iset() ---> assignment
 neg() ---> checks if negative
 inv() ---> changes sign
 cmp() ---> compares two numbers
@@ -13,40 +13,42 @@ mul() ---> multiplies two numbers
 div() ---> divides two numbers
 */
 #include "Command_Calls.h"
+#include "evil.h"
 // necessary to use err()
 #define INT 4
 #define INT_NEG_SHIFT 31
 int cmp_value;
+int cmp_store;
 int modulo;
 
 /*
-function: set
+function: iset
 The first and most important function, this function
-sets the variable on the left to the value on the right.
+isets the variable on the left to the value on the right.
 Same as 'V = #'
 */
-void set(int *LHS,int RHS){
+void iset(int *LHS,int RHS){
     (((*LHS)>>INT_NEG_SHIFT)&0x1) ? 1 : ({goto poszero_loop;});
 negzero_loop:
-    *LHS ? 1 : ({goto set;});
+    *LHS ? 1 : ({goto iset;});
     (*LHS)++;
     goto negzero_loop;
 poszero_loop:
-    *LHS ? 1 : ({goto set;});
+    *LHS ? 1 : ({goto iset;});
     (*LHS)--;
     goto poszero_loop;
-set:
-    ((RHS>>INT_NEG_SHIFT)&0x1) ? 1 : ({goto posset_loop;});
-negset_loop:
+iset:
+    ((RHS>>INT_NEG_SHIFT)&0x1) ? 1 : ({goto posiset_loop;});
+negiset_loop:
     RHS ? 1 : ({goto end;});
     RHS++;
     (*LHS)--;
-    goto negset_loop;
-posset_loop:
+    goto negiset_loop;
+posiset_loop:
     RHS ? 1 : ({goto end;});
     RHS--;
     (*LHS)++;
-    goto posset_loop;
+    goto posiset_loop;
 end:
 }
 /*
@@ -59,10 +61,10 @@ if it is positive, return a 0
 void neg(int value){
     ((value>>INT>>INT>>INT>>INT>>INT>>INT>>3)&0x1) ? ({goto negative;}) : ({goto positive;});
 positive:
-    set(&cmp_value, 0);
+    iset(&cmp_value, 0);
     goto end;
 negative:
-    set(&cmp_value, 1);
+    iset(&cmp_value, 1);
     goto end;
 end:
 }
@@ -95,8 +97,18 @@ add:
     B++;
     goto negative_loop;
 end:
-    set(&cmp_value, A);
+    iset(&cmp_value, A);
 }
+void cmp2(byte *A,byte *B){
+    byte B2,B3;
+//attempt to avoid destructive set. will require multiple sets and resets with current approach
+
+
+}
+
+
+
+
 /*
 function: add
 this function will simply add two numbers
@@ -104,7 +116,7 @@ together. Stores the result in the variable
 given in the third term.
 */
 void add(int initial,int increment,int *result){
-    set(result,initial);
+    iset(result,initial);
     neg(increment);
     cmp_value ? ({goto negative_inc;}) : ({goto positive_inc;});
 positive_inc:
@@ -145,14 +157,14 @@ in the given result variable
 */
 void mul(int multiplicand,int multiplier,int *result){
     static int negative;
-    set(&negative,0);
-    set(result, 0);
+    iset(&negative,0);
+    iset(result, 0);
     cmp(multiplier,0);
     cmp_value ? 1 : ({goto mul_zero;});
     neg(multiplier);
     cmp_value ? 1 : ({goto mul_loop;});
     inv(multiplier,&multiplier);
-    set(&negative,1);
+    iset(&negative,1);
 mul_loop:
     cmp(multiplier, 0);
     cmp_value ? 1 : ({goto neg_check;});
@@ -165,7 +177,7 @@ neg_check:
     inv(*result,result);
     goto end;
 mul_zero:
-    set(result,0);
+    iset(result,0);
     goto end;
 end:
 }
@@ -178,7 +190,7 @@ global variable "modulo"
 void div(int dividend,int divisor,int *result){
     divisor ? 1 : err();
     int negative;
-    set(&negative,0);
+    iset(&negative,0);
     neg(dividend);
     cmp_value ? 1 : ({goto neg1;});
     negative++;
@@ -189,7 +201,7 @@ neg1:
     negative++;
     inv(divisor,&divisor);
 neg2:
-    set(result,0);
+    iset(result,0);
 div_loop:
     neg(dividend);
     cmp_value ? ({goto modulo;}) : 1;
@@ -199,7 +211,7 @@ div_loop:
 modulo:
     (*result)--;
     add(dividend,divisor,&dividend);
-    set(&modulo,dividend);
+    iset(&modulo,dividend);
     cmp(negative,1);
     cmp_value ? ({goto end;}) : 1;
     inv(*result,result);

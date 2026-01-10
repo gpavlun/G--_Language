@@ -57,7 +57,7 @@ converts an integer to an ascii version
 void i2a(int integer,char *character){
     int increment;
     setc(character,integer);
-    set(&increment,0x30);
+    iset(&increment,0x30);
 positive_inc:
     cmp(increment,0);
     cmp_value ? 1 : ({goto end;});
@@ -73,7 +73,7 @@ converts ascii number to int
 void a2i(char character,int *integer){
     int increment;
     setc((char *)integer,character);
-    set(&increment,0x30);
+    iset(&increment,0x30);
 positive_inc:
     cmp(increment,0);
     cmp_value ? 1 : ({goto end;});
